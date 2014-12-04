@@ -31,48 +31,59 @@ function getPercentage(input)
   return per;
 }
 
+function sortAccordingToOccurrence(a, b) {
+	return a[1] - b[1];
+}
+
 //This function gives the binary codes for each letter in an array parameter
-function getCodes(occurrence){
+function getCodes(occurrence) {
 	var tree = new Array();
-	var secondTree =new Array();
+	var secondTree = new Array();
 	
-	this.getNext =function() {
-		if (tree.length > 0 && secondTree.length > 0 && tree[0].per < secondTree[0].occurrence)
-	  		return tree.shift();
+	this.getNext = function() {
+	if (tree.length > 0 && secondTree.length > 0 
+               && tree[0].occurrence < secondTree[0].occurrence)
+	  return tree.shift();
 	
-		if (tree.length > 0 && secondTree.length > 0  && tree[0].per > secondTree[0].occurrence)
-	  		return secondTree.shift();
+	if (tree.length > 0 && secondTree.length > 0 
+                && tree[0].occurrence > secondTree[0].occurrence)
+	  return secondTree.shift();
 	
-		if (tree.length > 0)
-		  	return tree.shift();
+	if (tree.length > 0)
+	  return tree.shift();
 	
-		return secondTree.shift();
+	return secondTree.shift();
 	}
+	
 	var sortedProb = new Array();
 	var codes = new Array();
 	
-	var x = 0;
+	var i = 0;
 	for (var elem in occurrence) {
-	  sortedProb[x] = new Array(elem, occurrence[elem]);
-	  x = x + 1;
+	  sortedProb[i] = new Array(elem, occurrence[elem]);
+	  
+	  i++;
 	}
 	
-	sortedProb = sortedProb.sort(sortNumberAsc);
-	x = 0;
+	sortedProb = sortedProb.sort(sortAccordingToOccurrence);
+	i = 0;
 	
 	for (var elem in sortedProb) {
-	  tree[x] = new node();
-	  tree[x].per = sortedProb[elem][1];
-	  tree[x].value = sortedProb[elem][0];
-	  x = x + 1;
+	  tree[i] = new node();
+	  tree[i].frequency = sortedProb[elem][1];
+	  tree[i].value = sortedProb[elem][0];
+	  i++;
 	}
+	console.log(secondTree);
 	while (tree.length + secondTree.length > 1) {
 		var left = getNext();
 		var right = getNext();
+		console.log("left"+left);
+		console.log("right"+right);
 		var newnode = new node();
 		newnode.left = left;
 		newnode.right = right;
-		newnode.prob = left.prob + right.prob;
+		newnode.occurrence = left.occurrence + right.occurrence;
 		newnode.left.parent = newnode;
 		newnode.right.parent = newnode;
 		secondTree.push(newnode);
@@ -101,13 +112,22 @@ function getCodes(occurrence){
 			code = code.substr(0, code.length - 1);
 		}
 	}
-	return codes;	
+	return codes;
+}
+
+function compressHuffman(input, codes) {
+  var output = input.split("");
+  for (var elem in output) {
+	  output[elem] = codes[output[elem]];
+  }
+  return output.join("");
 }
 
 function node(){
 	this.left;
 	this.right;
 	this.value;
+	this.frequency;
 	
 }
 
