@@ -1,5 +1,23 @@
 // JavaScript Document
 //This is the main function to compress the given text
+
+
+
+
+var c = document.getElementById("tree-canvas");
+var ctx = c.getContext("2d");
+var p=setInterval(generateLine,75);
+var x=40;
+var y=160
+function generateLine(){
+	if(y==0)
+	clearInterval(p);
+	ctx.moveTo(x,y);
+	y-=20;
+	x=x+20;
+	ctx.lineTo(x,y);
+	ctx.stroke();
+}
 function encode()
 {
 	var input = document.getElementById("input").value;
@@ -26,7 +44,7 @@ function getPercentage(input)
   }
 
   for (var elem in per) {
-	  per[elem] = per[elem] / len;
+	  per[elem] = per[elem];
   }
   return per;
 }
@@ -38,15 +56,14 @@ function sortAccordingToOccurrence(a, b) {
 //This function gives the binary codes for each letter in an array parameter
 function getCodes(occurrence) {
 	var tree = new Array();
-	var secondTree = new Array();
-	
+	var secondTree = new Array();	
 	this.getNext = function() {
 	if (tree.length > 0 && secondTree.length > 0 
-               && tree[0].occurrence < secondTree[0].occurrence)
+               && tree[0].frequency < secondTree[0].frequency)
 	  return tree.shift();
 	
 	if (tree.length > 0 && secondTree.length > 0 
-                && tree[0].occurrence > secondTree[0].occurrence)
+                && tree[0].frequency > secondTree[0].frequency)
 	  return secondTree.shift();
 	
 	if (tree.length > 0)
@@ -74,22 +91,22 @@ function getCodes(occurrence) {
 	  tree[i].value = sortedProb[elem][0];
 	  i++;
 	}
-	console.log(secondTree);
-	while (tree.length + secondTree.length > 1) {
+	
+		while (tree.length + secondTree.length > 1) {
 		var left = getNext();
 		var right = getNext();
-		console.log("left"+left);
-		console.log("right"+right);
 		var newnode = new node();
 		newnode.left = left;
 		newnode.right = right;
-		newnode.occurrence = left.occurrence + right.occurrence;
+		newnode.frequency = left.frequency + right.frequency;
 		newnode.left.parent = newnode;
 		newnode.right.parent = newnode;
 		secondTree.push(newnode);
+		console.log(secondTree);
 	}
-
+//	console.log(secondTree);
 	var currentnode = secondTree[0];
+	
 	var code = "";
 	while (currentnode) {
 		if (currentnode.value) {
@@ -112,7 +129,10 @@ function getCodes(occurrence) {
 			code = code.substr(0, code.length - 1);
 		}
 	}
+	
+	
 	return codes;
+	
 }
 
 function compressHuffman(input, codes) {
@@ -128,8 +148,10 @@ function node(){
 	this.right;
 	this.value;
 	this.frequency;
-	
+	this.parent;	
+	this.visited
 }
+
 
 //To check the file extension of the file browsed
 /*var file=document.getElementById("filename");
