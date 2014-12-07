@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+.main-wrapper {
+    width: 1002px;
+    height: auto;
+    margin: 0 auto;
+    background: #F9FCFF;
+}
+
+.header {
+    width: 1002px;
+    height: 100px;
+    background: #FCFCFC;
+}
+
+#topic {
+    font-size: 36px;
+}
+
+.circle {
+    height: 70px;
+    width: 70px;
+    border-radius: 70px;
+    background: red;
+}
+
+#test {
+    width: 1002px;
+    height: auto;
+}

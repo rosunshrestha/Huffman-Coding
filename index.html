@@ -1,16 +1,27 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Huffamn Coding</title>
+    <meta charset="utf-8">
+    <title>Huffamn Coding</title>
+    <link href="css/reset.css" rel="stylesheet" type="text/css">
+    <link href="css/layout.css" rel="stylesheet" type="text/css">
+    <link href="css/tree.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<textarea id="input" placeholder="Enter the text here to encode"></textarea>
-OR
-
-<br/>
-<input type="button" value="Encode" onClick="encode()"/>
-<input type="file" id="filename"/>
-<script type="text/javascript" src="js/main.js"></script>
+    <div class="main-wrapper">
+        <div class="header">
+            <span id="topic">Huffman Encoding</span>
+        </div>
+        <div>
+            <textarea id="input" placeholder="Enter the text here to encode"></textarea>
+            <br />
+            <input type="button" value="Encode" id="encode" />
+        </div>
+        <div id="test">
+            <canvas id="tree-canvas" width="1002px" height="auto"></canvas>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/canvas.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
