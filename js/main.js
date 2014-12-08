@@ -6,7 +6,7 @@ function Encoder() {
     this.encode = document.getElementById("encode");
     this.input;
     this.occurrence;
-    this.binCodes;
+    this.v;
     this.encoded0utput;
     that = this;
     this.encode.onclick = function () {
@@ -47,20 +47,38 @@ function sortAccordingToOccurrence(a, b) {
 //This function gives the binary codes for each letter in an array parameter
 function getCodes(occurrence) {
     var tree = new Array();
-    var secondTree = new Array();
+    var subTree = new Array();
+	this.checkPosition=function(){
+		if (tree.length > 0 && subTree.length > 0
+                   && tree[0].frequency < subTree[0].frequency && tree[1].frequency < subTree[0].frequency)
+            return "bottom";
+
+        else if (tree.length > 0 && subTree.length > 0
+                    && tree[0].frequency < subTree[0].frequency)
+            return "left";
+		else if(tree.length > 0 && subTree.length > 0
+                    && tree[0].frequency > subTree[0].frequency)
+			return "right";
+		else if(tree.length >1)
+			return "bottom";
+		else
+			return "top";
+		
+	
+	}
     this.getNext = function () {
-        if (tree.length > 0 && secondTree.length > 0
-                   && tree[0].frequency < secondTree[0].frequency)
+        if (tree.length > 0 && subTree.length > 0
+                   && tree[0].frequency < subTree[0].frequency)
             return tree.shift();
 
-        if (tree.length > 0 && secondTree.length > 0
-                    && tree[0].frequency > secondTree[0].frequency)
-            return secondTree.shift();
+        if (tree.length > 0 && subTree.length > 0
+                    && tree[0].frequency > subTree[0].frequency)
+            return subTree.shift();
 
         if (tree.length > 0)
             return tree.shift();
 
-        return secondTree.shift();
+        return subTree.shift();
     }
 
     var sortedProb = new Array();
@@ -83,27 +101,30 @@ function getCodes(occurrence) {
         i++;
     }
 
-    while (tree.length + secondTree.length > 1) {
-        var left = getNext();
+    while (tree.length + subTree.length > 1) {
+		var reference=checkPosition();
+		var left = getNext();
         if (left.value != undefined) {
             var rectangle = new Rectangle();
-            rectangle.create(left.value, 0);
+            rectangle.create(left.value, 0,reference);
         }
         var right = getNext();
         if (right.value != undefined) {
             var rectangle = new Rectangle();
-            rectangle.create(right.value, 1);
+            rectangle.create(right.value, 1,reference);
         }
         var newnode = new node();
         newnode.left = left;
         newnode.right = right;
         newnode.frequency = left.frequency + right.frequency;
+		var circle=new Circle();
+		circle.create(newnode.frequency,reference);
         newnode.left.parent = newnode;
         newnode.right.parent = newnode;
-        secondTree.push(newnode);
+        subTree.push(newnode);
     }
-    //	console.log(secondTree);
-    var currentnode = secondTree[0];
+    //	console.log(subTree);
+    var currentnode = subTree[0];
 
     var code = "";
     while (currentnode) {
@@ -148,8 +169,5 @@ function node() {
     this.parent;
     this.visited;
 }
-
-
-
 
 var encode = new Encoder();
