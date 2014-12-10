@@ -49,22 +49,23 @@ function getCodes(occurrence) {
     var tree = new Array();
     var subTree = new Array();
 	this.checkPosition=function(){
-		if (tree.length > 0 && subTree.length > 0
-                   && tree[0].frequency < subTree[0].frequency && tree[1].frequency < subTree[0].frequency)
+		if (tree[1]!=undefined && tree.length > 0 && subTree.length > 0
+                   && tree[0].frequency <= subTree[0].frequency && tree[1].frequency <= subTree[0].frequency)
             return "bottom";
 
         else if (tree.length > 0 && subTree.length > 0
-                    && tree[0].frequency < subTree[0].frequency)
+                    && tree[0].frequency <= subTree[0].frequency)
             return "left";
+		else if(subTree[1]!=undefined && tree.length > 0 && subTree.length > 0
+                    && tree[0].frequency > subTree[0].frequency && tree[0].frequency > subTree[1].frequency)
+			return "top";
 		else if(tree.length > 0 && subTree.length > 0
                     && tree[0].frequency > subTree[0].frequency)
 			return "right";
 		else if(tree.length >1)
 			return "bottom";
-		else
+		else 
 			return "top";
-		
-	
 	}
     this.getNext = function () {
         if (tree.length > 0 && subTree.length > 0
