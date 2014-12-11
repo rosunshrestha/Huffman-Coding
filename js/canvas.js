@@ -3,13 +3,8 @@ var framesPerSecond=0.7;
 var x=150;
 var y=20;
 var i=0;
-
-function draw() {
-    requestAnimationFrame(draw);
-    // Drawing code goes here
-	console.log(i++);
-}
-//draw();
+counter=0;
+var create = [];
 var position;
 var bottomPosition;
 /*var c= new Canvas();
@@ -17,25 +12,6 @@ function Canvas() {
   */  
 var c = document.getElementById("tree-canvas");
 var ctx = c.getContext("2d");
-function Block(x,y,width,height){
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-}
-
-Block.prototype.update = function(){
-    if(this.y < 360){
-        this.y+=10   
-    }else{
-        this.y = 0;   
-    }
-};
-
-Block.prototype.render = function(){
-	ctx.clearRect(this.x,this.y-10,this.width,this.height);
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-};
 
 //var b=new Block(60,80,40,40);
 //setInterval(main,300);
@@ -59,19 +35,18 @@ function checkSize() {
     //if (positionY >= c.height - 40)
       //  c.height = poitionY + 60;
 }
-
 //}
 
 function Rectangle() {
-    //this.position_top = positionY-positionY/10;
-    //this.position_left = positionX-positionX/10;
     this.value=new Array;
 	this.top = positionY;
     this.height = 20;;
     this.left = positionX;
     this.width =  40;
+	this.intervalID;
     var that = this;
 	var count=0;
+	
 	this.draw=function(){
 		ctx.fillStyle="#000";
 		ctx.fillRect(this.left, this.top, 40, 20);
@@ -79,24 +54,47 @@ function Rectangle() {
 		ctx.fillText(that.value[0]+","+that.value[1], positionX+10, positionY+12, 20);
 		positionX+=41;
 	}
+	
 	this.remove=function(){
 		//ctx.clearRect(that.left,that.top,40,20);
 		
 	}
-	this.update=function(x,y){
+	
+ 	function async_series ( fn_list, final_callback ) {
+		 console.log(fn_list);
+ 	    if (fn_list.length) {
+         var fn = fn_list.shift();
+         var callback = function (err) {
+             if (err) {
+                 final_callback(err); // error, abort
+             }
+             else {
+                 setTimeout(function() {
+					 async_series(fn_list,final_callback);
+				 }, 10000);
+             }
+         };
+         fn(callback);
+     }
+     else {
+         final_callback(null); // no errors
+    		 }
+	 }
+	
+	this.update=function(xPos,yPos){
 		
 		if(count>10)
 		{
-			if(that.left>x){
+			if(that.left>xPos){
 				that.left-=40;
-				if(that.left<x)
-					that.left=x;
+				if(that.left<xPos)
+					that.left=xPos;
 		
 			}
 			else{
 				that.left+=40;
-				if(that.left>x)
-					that.left=x;
+				if(that.left>xPos)
+					that.left=xPos;
 		
 			}
 		}
@@ -105,22 +103,33 @@ function Rectangle() {
 		else
 		that.top+=2;
 		count++;
-		if(that.top>y)
-		that.left=x;
+		if(that.top>yPos)
+		that.top=yPos;
 		
-		if(that.left==x && that.top==y)
-		window.cancelAnimationFrame();
+		if(that.left==xPos && that.top==yPos)
+		window.cancelAnimationFrame(that.intervalID);
+	
+	//that.left=xPos;
+	//that.top=yPos;
 	}
-	this.render=function(){
+	this.render=function(xPos,yPos){
 		if(count==11)
-		ctx.clearRect(that.left+40,that.top-20,that.width,that.height);
-		else if(count>11){
 		ctx.clearRect(that.left-40,that.top-20,that.width,that.height);
+		else if(count>11){
+			if(that.left==xPos)
+		{
+			ctx.clearRect(that.left,that.top-20,that.width,that.height);
+		}
+		else
+		ctx.clearRect(that.left-40,that.top-20,that.width,that.height);
+		}
+		if(that.left==xPos)
+		{
+			ctx.clearRect(that.left,that.top-20,that.width,that.height);
 		}
 		else
 		{
 			ctx.clearRect(that.left,that.top-2,that.width,that.height);
-		
 		}
 		ctx.fillStyle="#000";
 		ctx.fillRect(this.left,this.top,this.width,this.height);
@@ -128,20 +137,26 @@ function Rectangle() {
 		ctx.fillText(that.value[0]+","+that.value[1],this.left+10,this.top+12,20);
 		ctx.stroke();
 	}
-	this.intervalID=function(){ that.animate()}
-	this.animate=function(x,y){
-	that.update(x,y);
-		that.render();	
+	this.animate=function(xPos,yPos){
+	that.update(xPos,yPos);
+	that.render(xPos,yPos);		
 		setTimeout(function() {
-        requestAnimationFrame(that.animate);
- 
+		
+        that.intervalID=requestAnimationFrame(function(){that.animate(xPos,yPos)});
+ 		//setInterval(function(){that.animate(posX,posY)},500);
         // animating/drawing code goes here
  
  
-    }, 1000 / framesPerSecond);	
+    }, 1000/framesPerSecond);	
 	
 	}
-    this.create = function (value, direction, reference) {
+	this.test=function(){
+		async_series(create, function() { console.log("final is here"); });
+	}
+	
+    this.addFunction=function(value, direction, reference){
+	
+	create[counter++] =(function(value,direction,reference) {return function(cb){
 
         //if(direction==0)
 		if (reference == "bottom") {
@@ -169,11 +184,11 @@ function Rectangle() {
 		
 		
         that.animate(positionX, positionY);
-		ctx.rect(positionX, positionY, 40, 20);
+		/*ctx.rect(positionX, positionY, 40, 20);
         ctx.fillStyle = "#330066";
         ctx.stroke();
         ctx.fillText(value, positionX + 10, positionY + 10, 20);
-		
+		*/
 
         if (direction == 1) {
             if (reference == "bottom") {
@@ -206,12 +221,15 @@ function Rectangle() {
             var rline = new Line();
             rline.create(4);
             positionX -= 70;
-        }
-
-    }
-	
+        
+		}
+		if (cb) cb();
+		
+	}
+    })(value, direction, reference);
 }
 
+}
 Rectangle.prototype.update=function(){
     if(this.top < 360){
         this.y+=10   

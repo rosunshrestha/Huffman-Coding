@@ -2,16 +2,56 @@
 //This is the main function to compress the given text
 
 //main function that has all the encoding algorithms for huffmann encoding
+//var counter=0;
+
+ /*function async_series ( fn_list, final_callback ) {
+	 console.log(fn_list);
+     if (fn_list.length) {
+         var fn = fn_list.shift();
+         var callback = function (err) {
+             if (err) {
+                 final_callback(err); // error, abort
+             }
+             else {
+                 setTimeout(function() {
+					 async_series(fn_list,final_callback);
+				 }, 1000);
+             }
+         };
+         fn(callback);
+     }
+     else {
+         final_callback(null); // no errors
+     }
+ }
+
+var queue = [];
+function abc() {
+	for (var i=0; i<10; i++) {
+		queue[i] = (function(num) {
+			return function(cb) {
+				console.log('this is ', num);
+				if (cb) cb();
+			}
+		})(i);
+	}
+}
+*/
+//abc();
+//async_series(queue, function() { console.log("final is here"); });
+
+
+
 function Encoder() {
     this.encode = document.getElementById("encode");
     this.input;
     this.occurrence;
     this.v;
+	var counter=0;
     this.encoded0utput;
     that = this;
     this.encode.onclick = function () {
         that.input = document.getElementById("input").value;
-        console.log(input.value);
         that.occurrence = getPercentage(that.input);
         that.binCodes = getCodes(that.occurrence);
         that.encodedoutput = compressHuffman(that.input, that.binCodes);
@@ -46,7 +86,7 @@ function sortAccordingToOccurrence(a, b) {
 
 //This function gives the binary codes for each letter in an array parameter
 function getCodes(occurrence) {
-	this.letterCount=0;
+	var counter=0;
     var tree = new Array();
     var subTree = new Array();
     this.checkPosition = function () {
@@ -100,34 +140,42 @@ function getCodes(occurrence) {
 		rectangles[j]=new Rectangle();
 		rectangles[j].value=sortedProb[j];
 		rectangles[j].draw();
+		
 		//to animate the rectangle
 		//setInterval(rectangles[j].animate,500);
 	//rectangles[j].remove();			
 	}
 	i = 0;
-
     for (var elem in sortedProb) {
         tree[i] = new node();
         tree[i].frequency = sortedProb[elem][1];
         tree[i].value = sortedProb[elem][0];
         i++;
     }
-
+	
     while (tree.length + subTree.length > 1) {
-        var reference = checkPosition();
+        var temp;
+			
+		var reference = checkPosition();
         var left = getNext();
         if (left.value != undefined) {
             //rectangles[4].intervalID();
-			 var rectangle = new Rectangle();
-            //rectangles[this.letterCount++].create(left.value, 0, reference);
-			    rectangle.create(left.value, 0, reference);
+			// var rectangle = new Rectangle();
+            rectangles[counter].addFunction(left.value, 0, reference);
+			counter++;
+			//    rectangle.create(left.value, 0, reference);
         	
         }
+		
         var right = getNext();
         if (right.value != undefined) {
-            var rectangle = new Rectangle();
-            rectangle.create(right.value, 1, reference);
-        }
+            //var rectangle = new Rectangle();
+            //rectangle.create(right.value, 1, reference);
+        //rectangles[counter].move(right.value, 1, reference);
+		rectangles[counter].addFunction(left.value, 0, reference);
+			
+		counter++;
+		}
         var newnode = new node();
         newnode.left = left;
         newnode.right = right;
@@ -138,7 +186,10 @@ function getCodes(occurrence) {
         newnode.right.parent = newnode;
         subTree.push(newnode);
     }
-    //	console.log(subTree);
+	rectangles[0].test();
+    
+	
+	//	console.log(subTree);
     var currentnode = subTree[0];
 
     var code = "";
