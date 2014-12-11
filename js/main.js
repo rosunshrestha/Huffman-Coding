@@ -46,27 +46,28 @@ function sortAccordingToOccurrence(a, b) {
 
 //This function gives the binary codes for each letter in an array parameter
 function getCodes(occurrence) {
+	this.letterCount=0;
     var tree = new Array();
     var subTree = new Array();
-	this.checkPosition=function(){
-		if (tree[1]!=undefined && tree.length > 0 && subTree.length > 0
+    this.checkPosition = function () {
+        if (tree[1] != undefined && tree.length > 0 && subTree.length > 0
                    && tree[0].frequency <= subTree[0].frequency && tree[1].frequency <= subTree[0].frequency)
             return "bottom";
 
         else if (tree.length > 0 && subTree.length > 0
                     && tree[0].frequency <= subTree[0].frequency)
             return "left";
-		else if(subTree[1]!=undefined && tree.length > 0 && subTree.length > 0
+        else if (subTree[1] != undefined && tree.length > 0 && subTree.length > 0
                     && tree[0].frequency > subTree[0].frequency && tree[0].frequency > subTree[1].frequency)
-			return "top";
-		else if(tree.length > 0 && subTree.length > 0
+            return "top";
+        else if (tree.length > 0 && subTree.length > 0
                     && tree[0].frequency > subTree[0].frequency)
-			return "right";
-		else if(tree.length >1)
-			return "bottom";
-		else 
-			return "top";
-	}
+            return "right";
+        else if (tree.length > 1)
+            return "bottom";
+        else
+            return "top";
+    }
     this.getNext = function () {
         if (tree.length > 0 && subTree.length > 0
                    && tree[0].frequency < subTree[0].frequency)
@@ -93,7 +94,17 @@ function getCodes(occurrence) {
     }
 
     sortedProb = sortedProb.sort(sortAccordingToOccurrence);
-    i = 0;
+    var rectangles=new Array();
+	for(var j=0;j<sortedProb.length;j++)
+	{
+		rectangles[j]=new Rectangle();
+		rectangles[j].value=sortedProb[j];
+		rectangles[j].draw();
+		//to animate the rectangle
+		//setInterval(rectangles[j].animate,500);
+	//rectangles[j].remove();			
+	}
+	i = 0;
 
     for (var elem in sortedProb) {
         tree[i] = new node();
@@ -103,23 +114,26 @@ function getCodes(occurrence) {
     }
 
     while (tree.length + subTree.length > 1) {
-		var reference=checkPosition();
-		var left = getNext();
+        var reference = checkPosition();
+        var left = getNext();
         if (left.value != undefined) {
-            var rectangle = new Rectangle();
-            rectangle.create(left.value, 0,reference);
+            //rectangles[4].intervalID();
+			 var rectangle = new Rectangle();
+            //rectangles[this.letterCount++].create(left.value, 0, reference);
+			    rectangle.create(left.value, 0, reference);
+        	
         }
         var right = getNext();
         if (right.value != undefined) {
             var rectangle = new Rectangle();
-            rectangle.create(right.value, 1,reference);
+            rectangle.create(right.value, 1, reference);
         }
         var newnode = new node();
         newnode.left = left;
         newnode.right = right;
         newnode.frequency = left.frequency + right.frequency;
-		var circle=new Circle();
-		circle.create(newnode.frequency,reference);
+        var circle = new Circle();
+        circle.create(newnode.frequency, reference);
         newnode.left.parent = newnode;
         newnode.right.parent = newnode;
         subTree.push(newnode);
