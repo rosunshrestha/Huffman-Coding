@@ -1,20 +1,24 @@
 @charset "utf-8";
 /* CSS Document */
 .main-wrapper {
-    width: 1002px;
+	width: 1002px;
     height: auto;
     margin: 0 auto;
     background: #F9FCFF;
 }
 
-.header {
-    width: 1002px;
+#header1 {
+	padding:20px;
+    width: 962px;
     height: 100px;
     background: #FCFCFC;
 }
-
-#topic {
-    font-size: 36px;
+#header2 {
+	padding:20px;
+    width: 962px;
+    height: 100px;
+    background: #FCFCFC;
+	display:none;
 }
 
 .circle {
@@ -24,7 +28,17 @@
     background: red;
 }
 
-#test {
-    width: 1002px;
-    height:auto;
+#canvas {
+   padding:20px;
+    width: auto;
+	display:none;
+	overflow:scroll;
+     height:auto;
 }
+#info{
+	width:1002px;
+	height:auto;
+	background:#1695a3;
+	display:none;
+}
+

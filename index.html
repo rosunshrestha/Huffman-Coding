@@ -9,22 +9,49 @@
 </head>
 <body>
     <div class="main-wrapper">
-        <div class="header">
-            <span id="topic">Huffman Encoding</span>
-        </div>
-        <div>
+        <div id="header1">
+            <span id="topic"><strong>Huffman Encoding</strong></span>
+            <br />
+            <span id="topic1">Enter the Text Below</span>
             <textarea id="input" placeholder="Enter the text here to encode"></textarea>
             <br />
-        </div>
-        <div id="test">
-        <canvas id="tree-canvas" width="1002px" height="600px"></canvas>
-        </div>
-        
+
             <input type="button" value="Encode" id="encode" />
-        
+
+        </div>
+        <div id="header2">
+            <span id="topic"><strong>Huffman Encoding</strong></span>
+            <br />
+            <input type="button" value="Encode Another Data" id="encode1" />
+
+        </div>
+        <div id="canvas">
+            <canvas id="tree-canvas" width="962px" height="550px"></canvas>
+            <input type="button" value="Save" class="save" id="saver" onclick="saveImage" />
+            <label id="label">Image saved successfully </label>
+
+        </div>
+        <div id="info">
+
+            <span><strong>The Respective frequencies are</strong></span>
+
+            <span id="respectives-frequency"></span>
+            <br />
+            <span><strong>The Respective codes are</strong></span>
+
+            <span id="respectives-codes"></span>
+            <br />
+            <span><strong>The Encoded codes are</strong></span>
+            <span id="encoded-code"></span>
+            <br />
+            <span><strong>The total cost are</strong></span>
+            <span id="total-cost"></span>
+
+        </div>
     </div>
     <script type="text/javascript" src="js/requestAnimation.js"></script>
     <script type="text/javascript" src="js/canvas.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/ajax.js"></script>
 </body>
 </html>

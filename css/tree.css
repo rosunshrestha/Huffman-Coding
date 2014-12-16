@@ -1,3 +1,62 @@
 @charset "utf-8";
 /* CSS Document */
+@charset "utf-8";
+/* CSS Document */
 
+#topic {
+    font-size: 36px;
+    font-family: 'Lato', sans-serif;
+    color: #225378;
+}
+
+.save {
+    background: #225378;
+    font-family: 'Lato', sans-serif;
+    ;
+    color: white;
+}
+
+#label {
+    color: green;
+    display: none;
+    font-size: 20px;
+}
+
+#topic1 {
+    font-size: 18px;
+    font-family: 'Lato', sans-serif;
+    color: #225378;
+    display: block;
+}
+
+#input {
+    width: 300px;
+    height: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#encode {
+    width: 85px;
+    height: 40px;
+    background: #225378;
+    color: white;
+    cursor: pointer;
+}
+
+
+#encode1 {
+    width: 185px;
+    height: 40px;
+    background: #225378;
+    color: white;
+    cursor: pointer;
+}
+
+#info span {
+    font-family: 'Lato', sans-serif;
+    color: white;
+    display: block;
+    font-size: 24px;
+    line-height: 26px;
+}
